@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  title: Ticket Booking System API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+  /admin/shows:
+    post:
+      summary: Create a show/trip/slot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, start_time, total_seats]
+              properties:
+                name:
+                  type: string
+                start_time:
+                  type: string
+                  format: date-time
+                total_seats:
+                  type: integer
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+    get:
+      summary: List all shows
+      responses:
+        '200':
+          description: OK
+  /shows:
+    get:
+      summary: List shows (public)
+      responses:
+        '200':
+          description: OK
+  /shows/{id}/availability:
+    get:
+      summary: Availability summary for a show
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+          required: true
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not found
+  /bookings:
+    post:
+      summary: Create a booking (PENDING with held seats)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [show_id, quantity]
+              properties:
+                show_id: { type: integer }
+                quantity: { type: integer }
+      responses:
+        '201': { description: Created }
+        '400': { description: Error }
+  /bookings/{id}:
+    get:
+      summary: Get a booking by id
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+          required: true
+      responses:
+        '200': { description: OK }
+        '404': { description: Not found }
+  /bookings/{id}/confirm:
+    post:
+      summary: Confirm a booking
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+          required: true
+      responses:
+        '200': { description: OK }
+        '400': { description: Error }
