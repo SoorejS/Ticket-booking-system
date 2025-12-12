@@ -27,7 +27,7 @@ try {
 app.use('/admin', adminRoutes);
 app.use('/', publicRoutes);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5289;
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
   startExpiryJob();
@@ -37,3 +37,4 @@ process.on('SIGINT', async () => {
   await pool.end();
   process.exit(0);
 });
+
